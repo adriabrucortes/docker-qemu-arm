@@ -155,7 +155,7 @@ expect "#"
 send "sed -i 's|^#http://|http://|' /etc/apk/repositories\r"
 
 expect "#"
-send "apk update && apk add docker ip6tables rclone fuse unionfs-fuse\r"
+send "apk update && apk add docker docker-cli-compose ip6tables rclone fuse unionfs-fuse\r"
 
 expect "#"
 send "service docker start\r"
