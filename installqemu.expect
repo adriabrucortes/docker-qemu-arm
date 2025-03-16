@@ -39,7 +39,7 @@ spawn qemu-img create -f qcow2 "$env(INSTALLATION_DIR)/alpine.img" $env(DISK_SIZ
 expect "alpine.img"
 
 sleep 5
-spawn qemu-system-x86_64 -machine q35 -m 1024 -smp cpus=2 -cpu qemu64 \
+spawn qemu-system-x86_64 -machine q35 -m 6144 -smp cpus=4 -cpu qemu64 \
    -drive if=pflash,format=raw,read-only=on,file=$env(PREFIX)/share/qemu/edk2-x86_64-code.fd \
    -netdev user,id=n1,hostfwd=tcp::2222-:22 -device virtio-net,netdev=n1 \
    -cdrom "$env(INSTALLATION_DIR)/alpine.iso" \
@@ -138,7 +138,7 @@ send "$env(ROOT_PASSWORD)\n"
 
 # only allow login with ssh key
 expect "#"
-send "sed -i -E 's/^#PermitRootLogin prohibit-password/PermitRootLogin prohibit-password/' /etc/ssh/sshd_config\r"
+send "sed -i -E 's/^#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config\r"
 
 expect "#"
 send "service sshd start\r"
@@ -155,7 +155,7 @@ expect "#"
 send "sed -i 's|^#http://|http://|' /etc/apk/repositories\r"
 
 expect "#"
-send "apk update && apk add docker ip6tables\r"
+send "apk update && apk add docker ip6tables rclone fuse unionfs-fuse\r"
 
 expect "#"
 send "service docker start\r"
